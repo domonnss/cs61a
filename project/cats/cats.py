@@ -173,6 +173,17 @@ def memo_diff(diff_function):
     def memoized(entered, source, limit):
         # BEGIN PROBLEM EC
         "*** YOUR CODE HERE ***"
+        key = (entered, source)
+
+        if key in cache:
+            cached_value, cached_limit = cache[key]
+            if limit <= cached_limit:
+                return cached_value
+
+        value = diff_function(entered, source, limit)
+        cache[key] = (value, limit)
+        return value
+
         # END PROBLEM EC
 
     return memoized
@@ -183,6 +194,7 @@ def memo_diff(diff_function):
 ###########
 
 
+@memo
 def autocorrect(
     entered_word: str, word_list: list[str], diff_function, limit: int
 ) -> str:
@@ -263,6 +275,7 @@ def furry_fixes(entered: str, source: str, limit: int) -> int:
     # END PROBLEM 6
 
 
+@memo_diff
 def minimum_mewtations(entered: str, source: str, limit: int) -> int:
     """A diff function for autocorrect that computes the edit distance from ENTERED to SOURCE.
     This function takes in a string ENTERED, a string SOURCE, and a number LIMIT.
@@ -285,6 +298,8 @@ def minimum_mewtations(entered: str, source: str, limit: int) -> int:
         return 1
     if entered == "" or source == "":
         return max(len(entered), len(source))
+    if abs(len(entered) - len(source)) > limit:
+        return limit + 1
 
     # Recursive cases should go below here
     if entered[0] == source[0]:  # Feel free to remove or add additional cases
