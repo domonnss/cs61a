@@ -1,6 +1,5 @@
 """Typing test implementation"""
 
-import math
 import random
 from datetime import datetime
 from email import message_from_binary_file
